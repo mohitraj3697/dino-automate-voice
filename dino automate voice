@@ -1,0 +1,29 @@
+import speech_recognition as sr
+import pyautogui
+
+def listen_for_jump():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening for 'jump' command...")
+        try:
+            audio = recognizer.listen(source, timeout=5, phrase_time_limit=1 )
+            command = recognizer.recognize_google(audio).lower()
+            return command
+        except sr.UnknownValueError:
+            print("Could not understand the command.")
+        except sr.RequestError as e:
+            print(f"Error with the speech recognition service: {e}")
+        except sr.WaitTimeoutError:
+            print("No command detected within the time limit.")
+    return None
+
+def main():
+    while True:
+        command = listen_for_jump()
+        if command == "jump":
+            print("Jump command detected - Dino jumps!")
+            pyautogui.press('space')
+
+if __name__ == "__main__":
+    main()
+   
